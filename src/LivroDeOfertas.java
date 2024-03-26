@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class LivroDeOfertas {
@@ -8,13 +10,30 @@ public class LivroDeOfertas {
     private PriorityQueue<Ordem> compras;
 
     public LivroDeOfertas() {
-        this.vendas = new PriorityQueue<>(Comparator.comparing(Ordem::valor).thenComparing(Ordem::id));
-        this.compras = new PriorityQueue<>(Comparator.comparing(Ordem::valor).reversed().thenComparing(Ordem::id));
+        this.vendas = new PriorityQueue<>(Comparator.comparing(Ordem::getValor).thenComparing(Ordem::getId));
+        this.compras = new PriorityQueue<>(Comparator.comparing(Ordem::getValor).reversed().thenComparing(Ordem::getId));
     }
 
     public void armazenar(String tipo, String acao, int quantidade, double valor, String corretora) {
         Ordem ordem = registrarOferta(tipo, acao, quantidade, valor, corretora);
-        // verifica se é possível realizar e cria transação
+
+        // Transaction
+        if (ordem.getTipo() == TipoOrdem.compra) {
+            List<Ordem> remover = new ArrayList<>();
+            int quantidadeNecessaria = ordem.getQuantidade();
+            for (Ordem ordemIteracao : vendas) {
+                if (ordemIteracao.getValor() > ordem.getValor()) break;
+                if (quantidadeNecessaria < ordemIteracao.getQuantidade()) {
+                    ordemIteracao.setQuantidade(ordemIteracao.getQuantidade() - quantidadeNecessaria);
+                    quantidadeNecessaria = 0;
+                    break;
+                } else {
+                    quantidadeNecessaria -= ordemIteracao.getQuantidade();
+                    remover.add(ordemIteracao);
+                }
+            }
+            vendas.removeAll(remover);
+        }
     }
 
     private Ordem registrarOferta(String tipo, String acao, int quantidade, double valor, String corretora) {
@@ -34,7 +53,7 @@ public class LivroDeOfertas {
 
         livroDeOfertas.armazenar("venda", "XPTO", 15, 150, "ABCD");
         livroDeOfertas.armazenar("venda", "XPTO", 15, 150, "ABCD");
-        livroDeOfertas.armazenar("compra", "XPTO", 15, 150, "ABCD");
+        livroDeOfertas.armazenar("compra", "XPTO", 20, 150, "ABCD");
         livroDeOfertas.armazenar("venda", "XPTO", 150, 1500, "ABCD");
         livroDeOfertas.armazenar("compra", "XPTO", 15, 1500, "ABCD");
 
