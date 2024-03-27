@@ -17,7 +17,6 @@ public class LivroDeOfertas {
     public void armazenar(String tipo, String acao, int quantidade, double valor, String corretora) {
         Ordem ordem = registrarOferta(tipo, acao, quantidade, valor, corretora);
 
-        // Transaction
         if (ordem.getTipo() == TipoOrdem.compra) {
             List<Ordem> remover = new ArrayList<>();
             int quantidadeNecessaria = ordem.getQuantidade();
@@ -33,6 +32,11 @@ public class LivroDeOfertas {
                 }
             }
             vendas.removeAll(remover);
+            if (quantidadeNecessaria == 0) {
+                compras.remove(ordem);
+            } else {
+                ordem.setQuantidade(quantidadeNecessaria);
+            }
         }
     }
 
@@ -53,7 +57,7 @@ public class LivroDeOfertas {
 
         livroDeOfertas.armazenar("venda", "XPTO", 15, 150, "ABCD");
         livroDeOfertas.armazenar("venda", "XPTO", 15, 150, "ABCD");
-        livroDeOfertas.armazenar("compra", "XPTO", 20, 150, "ABCD");
+        livroDeOfertas.armazenar("compra", "XPTO", 35, 150, "ABCD");
         livroDeOfertas.armazenar("venda", "XPTO", 150, 1500, "ABCD");
         livroDeOfertas.armazenar("compra", "XPTO", 15, 1500, "ABCD");
 
