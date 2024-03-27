@@ -17,6 +17,7 @@ public class LivroDeOfertas {
     public void armazenar(String tipo, String acao, int quantidade, double valor, String corretora) {
         Ordem ordem = registrarOferta(tipo, acao, quantidade, valor, corretora);
 
+        // Extrair para Transação
         if (ordem.getTipo() == TipoOrdem.compra) {
             List<Ordem> remover = new ArrayList<>();
             int quantidadeNecessaria = ordem.getQuantidade();
@@ -25,6 +26,7 @@ public class LivroDeOfertas {
                 if (quantidadeNecessaria < ordemIteracao.getQuantidade()) {
                     ordemIteracao.setQuantidade(ordemIteracao.getQuantidade() - quantidadeNecessaria);
                     quantidadeNecessaria = 0;
+                    // Armazena em uma lista de afetados
                     break;
                 } else {
                     quantidadeNecessaria -= ordemIteracao.getQuantidade();
@@ -37,6 +39,7 @@ public class LivroDeOfertas {
             } else {
                 ordem.setQuantidade(quantidadeNecessaria);
             }
+            // carrega lista de afetados e envia mensagem
         }
     }
 
