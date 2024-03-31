@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ public class Ordem {
     private int quantidade;
     private double valor;
     private String corretora;
+    private LocalDateTime dataHoraVenda;
 
     public Ordem(TipoOrdem tipo, String acao, int quantidade, double valor, String corretora) {
         this.id = UUID.randomUUID();
@@ -72,6 +74,14 @@ public class Ordem {
         if (o == null || getClass() != o.getClass()) return false;
         Ordem ordem = (Ordem) o;
         return quantidade == ordem.quantidade && Double.compare(ordem.valor, valor) == 0 && Objects.equals(id, ordem.id) && tipo == ordem.tipo && Objects.equals(acao, ordem.acao) && Objects.equals(corretora, ordem.corretora);
+    }
+
+    public LocalDateTime getDataHoraVenda() {
+        return dataHoraVenda;
+    }
+
+    public void setDataHoraVenda(LocalDateTime dataHoraVenda) {
+        this.dataHoraVenda = dataHoraVenda;
     }
 
     @Override

@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -16,31 +17,7 @@ public class LivroDeOfertas {
 
     public void armazenar(String tipo, String acao, int quantidade, double valor, String corretora) {
         Ordem ordem = registrarOferta(tipo, acao, quantidade, valor, corretora);
-
-        // Extrair para Transação
-        if (ordem.getTipo() == TipoOrdem.compra) {
-            List<Ordem> remover = new ArrayList<>();
-            int quantidadeNecessaria = ordem.getQuantidade();
-            for (Ordem ordemIteracao : vendas) {
-                if (ordemIteracao.getValor() > ordem.getValor()) break;
-                if (quantidadeNecessaria < ordemIteracao.getQuantidade()) {
-                    ordemIteracao.setQuantidade(ordemIteracao.getQuantidade() - quantidadeNecessaria);
-                    quantidadeNecessaria = 0;
-                    // Armazena em uma lista de afetados
-                    break;
-                } else {
-                    quantidadeNecessaria -= ordemIteracao.getQuantidade();
-                    remover.add(ordemIteracao);
-                }
-            }
-            vendas.removeAll(remover);
-            if (quantidadeNecessaria == 0) {
-                compras.remove(ordem);
-            } else {
-                ordem.setQuantidade(quantidadeNecessaria);
-            }
-            // carrega lista de afetados e envia mensagem
-        }
+        Transacoes.armazena(ordem, vendas, compras);
     }
 
     private Ordem registrarOferta(String tipo, String acao, int quantidade, double valor, String corretora) {
