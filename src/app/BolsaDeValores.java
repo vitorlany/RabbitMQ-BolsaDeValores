@@ -1,3 +1,5 @@
+package app;
+
 public class BolsaDeValores {
     private LivroDeOfertas livroDeOfertas;
 

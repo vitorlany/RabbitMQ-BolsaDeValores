@@ -1,5 +1,6 @@
+package app;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -17,7 +18,17 @@ public class LivroDeOfertas {
 
     public void armazenar(String tipo, String acao, int quantidade, double valor, String corretora) {
         Ordem ordem = registrarOferta(tipo, acao, quantidade, valor, corretora);
-        Transacoes.armazena(ordem, vendas, compras);
+        Transacoes.armazena(ordem, this);
+    }
+
+    public void atualizaCompra(Ordem ordem, int quantidadeExcedente, List<Ordem> vendidos) {
+        vendas.removeAll(vendidos);
+        if (quantidadeExcedente == 0) {
+            ordem.setDataHoraVenda(LocalDateTime.now());
+            compras.remove(ordem);
+        } else {
+            ordem.setQuantidade(quantidadeExcedente);
+        }
     }
 
     private Ordem registrarOferta(String tipo, String acao, int quantidade, double valor, String corretora) {
@@ -30,6 +41,14 @@ public class LivroDeOfertas {
             compras.add(ordem);
         }
         return ordem;
+    }
+
+    public PriorityQueue<Ordem> getVendas() {
+        return vendas;
+    }
+
+    public PriorityQueue<Ordem> getCompras() {
+        return compras;
     }
 
     public static void main(String[] args) {

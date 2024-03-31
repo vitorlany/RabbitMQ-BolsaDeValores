@@ -1,3 +1,5 @@
+package app;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -91,7 +93,7 @@ public class Ordem {
 
     @Override
     public String toString() {
-        return "Ordem{" +
+        return "app.Ordem{" +
                 "id=" + id +
                 ", tipo=" + tipo +
                 ", acao='" + acao + '\'' +
