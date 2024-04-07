@@ -39,23 +39,4 @@ public class LivroDeOfertas {
             return novoLivro;
         }
     }
-
-    public static void main(String[] args) {
-        LivroDeOfertas livroDeOfertas = getInstance("petr4");
-
-        Ordem ordem1 = new Ordem(15, 150, "XPTO");
-        Ordem ordem2 = new Ordem(15, 150, "ABCD");
-        Ordem ordem3 = new Ordem(35, 150, "VITAO");
-        Ordem ordem4 = new Ordem(150, 1500, "VITAO");
-        Ordem ordem5 = new Ordem(15, 1500, "ABCD");
-
-        livroDeOfertas.registrarOrdemDeVenda(ordem1);
-        livroDeOfertas.registrarOrdemDeVenda(ordem2);
-        livroDeOfertas.registrarOrdemDeCompra(ordem3);
-        livroDeOfertas.registrarOrdemDeVenda(ordem4);
-        livroDeOfertas.registrarOrdemDeCompra(ordem5);
-
-        System.out.println(livroDeOfertas.ordensDeCompra);
-        System.out.println(livroDeOfertas.ordensDeVenda);
-    }
 }
