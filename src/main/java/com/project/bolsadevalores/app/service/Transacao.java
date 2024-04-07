@@ -8,13 +8,22 @@ import java.util.Queue;
 
 public class Transacao {
 
-    public void efetuarTransacao(Ordem ordem, Queue<Ordem> filaAtual, Queue<Ordem> filaDeOutroTipoDeOrdem) {
+    public void efetuarVenda(Ordem ordem, Queue<Ordem> filaAtual, Queue<Ordem> filaDeOutroTipoDeOrdem) {
+        this.efetuarTransacao(ordem, filaAtual, filaDeOutroTipoDeOrdem, true);
+    }
+
+    public void efetuarCompra(Ordem ordem, Queue<Ordem> filaAtual, Queue<Ordem> filaDeOutroTipoDeOrdem) {
+        this.efetuarTransacao(ordem, filaAtual, filaDeOutroTipoDeOrdem, false);
+    }
+
+    private void efetuarTransacao(Ordem ordem, Queue<Ordem> filaAtual, Queue<Ordem> filaDeOutroTipoDeOrdem, boolean isCompra) {
         Queue<Ordem> fila = filaDeOutroTipoDeOrdem;
         List<Ordem> remover = new ArrayList<>();
         int quantidadeNecessaria = ordem.getQuantidade();
 
         for (Ordem ordemIteracao : fila) {
-            if ((quantidadeNecessaria == 0) || (ordemIteracao.getValor() > ordem.getValor())) break;
+            if ((quantidadeNecessaria == 0) || (isCompra ? (ordemIteracao.getValor() > ordem.getValor()) :
+                                                           (ordemIteracao.getValor() < ordem.getValor()))) break;
             if (quantidadeNecessaria < ordemIteracao.getQuantidade()) {
                 ordemIteracao.setQuantidade(ordemIteracao.getQuantidade() - quantidadeNecessaria);
                 quantidadeNecessaria = 0;

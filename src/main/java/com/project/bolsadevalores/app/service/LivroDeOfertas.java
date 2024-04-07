@@ -22,12 +22,12 @@ public class LivroDeOfertas {
 
     public void registrarOrdemDeCompra(Ordem ordem) {
         ordensDeCompra.add(ordem);
-        transacao.efetuarTransacao(ordem, ordensDeCompra, ordensDeVenda);
+        transacao.efetuarCompra(ordem, ordensDeCompra, ordensDeVenda);
     }
 
     public void registrarOrdemDeVenda(Ordem ordem) {
         ordensDeVenda.add(ordem);
-        transacao.efetuarTransacao(ordem, ordensDeVenda, ordensDeCompra);
+        transacao.efetuarVenda(ordem, ordensDeVenda, ordensDeCompra);
     }
 
     public static LivroDeOfertas getInstance(String codigoDeAcao) {
