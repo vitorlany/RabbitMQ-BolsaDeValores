@@ -3,8 +3,8 @@ package com.project.bolsadevalores.app.messaging;
 import com.project.bolsadevalores.app.domain.Ordem;
 import com.project.bolsadevalores.app.messaging.dto.OrdemMessage;
 import com.project.bolsadevalores.app.service.BolsaDeValores;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -37,8 +37,9 @@ public class Queue {
         System.out.println("Vender: " + content);
     }
 
+    @PostConstruct
     public void enviarAtualizacaoDeStatus() {
-        Message message = new Message("{\"quantidade\": 5, \"valor\": 135.5, \"corretora\": \"XPTO\"}".getBytes());
-        template.send("comprar.*", "comprar.petr4", message);
+        OrdemMessage ordem = new OrdemMessage(1, 10, "abc");
+        template.convertAndSend("comprar.*", "comprar.petr4", ordem);
     }
 }
