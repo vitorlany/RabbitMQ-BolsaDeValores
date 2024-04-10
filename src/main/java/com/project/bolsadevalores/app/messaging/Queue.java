@@ -4,7 +4,9 @@ import com.project.bolsadevalores.app.domain.Ordem;
 import com.project.bolsadevalores.app.messaging.dto.OrdemMessage;
 import com.project.bolsadevalores.app.service.BolsaDeValores;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class Queue {
+
+    RabbitTemplate template;
 
     //comprar.petr4
     //{"quantidade": 5, "valor": 135.5, "corretora": "XPTO"}
@@ -21,6 +25,7 @@ public class Queue {
         String codigoDeAcao = routingKey.replaceFirst("comprar.", "");
         Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora());
         BolsaDeValores.comprarAcao(ordem, codigoDeAcao);
+        System.out.println("Comprar: " + content);
     }
 
     @RabbitListener(queues = "VenderAcao")
@@ -29,6 +34,11 @@ public class Queue {
         String codigoDeAcao = routingKey.replaceFirst("vender.", "");
         Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora());
         BolsaDeValores.venderAcao(ordem, codigoDeAcao);
+        System.out.println("Vender: " + content);
     }
-    
+
+    public void enviarAtualizacaoDeStatus() {
+        Message message = new Message("{\"quantidade\": 5, \"valor\": 135.5, \"corretora\": \"XPTO\"}".getBytes());
+        template.send("comprar.*", "comprar.petr4", message);
+    }
 }
