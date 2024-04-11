@@ -1,0 +1,7 @@
+spring:
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "trabalholab"
+    virtual-host: "/"
+    password: "I<)D,tF5B8w8"

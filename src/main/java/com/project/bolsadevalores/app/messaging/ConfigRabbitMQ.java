@@ -1,5 +1,9 @@
 package com.project.bolsadevalores.app.messaging;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -21,4 +25,49 @@ public class ConfigRabbitMQ {
         return rabbitTemplate;
     }
 
+    @Bean
+    Queue queueVenderAcao() {
+        return new Queue("VenderAcao", true);
+    }
+
+    @Bean
+    TopicExchange exchangeVender() {
+        return new TopicExchange("vender.*");
+    }
+
+    @Bean
+    Binding bindingVender() {
+        return BindingBuilder.bind(queueVenderAcao()).to(exchangeVender()).with("vender.*");
+    }
+
+    @Bean
+    Queue queueComprarAcao() {
+        return new Queue("ComprarAcao", true);
+    }
+
+    @Bean
+    TopicExchange exchangeComprar() {
+        return new TopicExchange("comprar.*");
+    }
+
+    @Bean
+    Binding bindingComprar() {
+        return BindingBuilder.bind(queueComprarAcao()).to(exchangeComprar()).with("comprar.*");
+    }
+
+    @Bean
+    Queue queueAtualizacaoAcao() {
+        return new Queue("AtualizacaoAcao", true);
+    }
+
+
+    @Bean
+    TopicExchange exchangeAtualizacao() {
+        return new TopicExchange("atualizacao.*");
+    }
+
+    @Bean
+    Binding bindingAtualizacao() {
+        return BindingBuilder.bind(queueAtualizacaoAcao()).to(exchangeAtualizacao()).with("atualizacao.*");
+    }
 }

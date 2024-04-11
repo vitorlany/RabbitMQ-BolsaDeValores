@@ -43,7 +43,7 @@ public class Queue {
         System.out.println("Vender: " + content);
     }
 
-    // Fazer envio formato JSON para supperte de apps externos
+    // Fazer envio formato JSON para suporte de apps externos
     @PostConstruct
     public void enviarAtualizacaoDeStatus() throws JsonProcessingException {
         OrdemMessage ordem = new OrdemMessage(1, 10, "abc");

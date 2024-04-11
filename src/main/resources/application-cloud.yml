@@ -1,0 +1,7 @@
+spring:
+  rabbitmq:
+    host: "gull-01.rmq.cloudamqp.com"
+    port: 5672
+    username: "qqvipbxv"
+    virtual-host: "qqvipbxv"
+    password: "hw8GYRPOfSi2kE1JGgHNsyd7A2oEKySx"
