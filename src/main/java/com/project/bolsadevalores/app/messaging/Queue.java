@@ -1,10 +1,15 @@
 package com.project.bolsadevalores.app.messaging;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.bolsadevalores.app.domain.Ordem;
 import com.project.bolsadevalores.app.messaging.dto.OrdemMessage;
 import com.project.bolsadevalores.app.service.BolsaDeValores;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessagePropertiesBuilder;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Component;
 public class Queue {
 
     RabbitTemplate template;
+    ObjectMapper objectMapper;
 
     //comprar.petr4
     //{"quantidade": 5, "valor": 135.5, "corretora": "XPTO"}
@@ -37,9 +43,16 @@ public class Queue {
         System.out.println("Vender: " + content);
     }
 
+    // Fazer envio formato JSON para supperte de apps externos
     @PostConstruct
-    public void enviarAtualizacaoDeStatus() {
+    public void enviarAtualizacaoDeStatus() throws JsonProcessingException {
         OrdemMessage ordem = new OrdemMessage(1, 10, "abc");
-        template.convertAndSend("comprar.*", "comprar.petr4", ordem);
+        Message message = MessageBuilder.withBody(objectMapper.writeValueAsString(ordem).getBytes())
+                .andProperties(MessagePropertiesBuilder
+                        .newInstance()
+                        .setContentType("application/json")
+                        .build())
+                .build();
+        template.convertAndSend("atualizacao.*", "atualizacao.btc", message);
     }
 }
