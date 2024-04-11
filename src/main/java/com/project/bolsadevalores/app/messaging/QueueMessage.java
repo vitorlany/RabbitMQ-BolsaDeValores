@@ -3,9 +3,9 @@ package com.project.bolsadevalores.app.messaging;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.bolsadevalores.app.domain.Ordem;
+import com.project.bolsadevalores.app.messaging.dto.AtualizacaoMessage;
 import com.project.bolsadevalores.app.messaging.dto.OrdemMessage;
 import com.project.bolsadevalores.app.service.BolsaDeValores;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class Queue {
+public class QueueMessage {
 
     RabbitTemplate template;
     ObjectMapper objectMapper;
@@ -43,16 +43,17 @@ public class Queue {
         System.out.println("Vender: " + content);
     }
 
-    // Fazer envio formato JSON para suporte de apps externos
-    @PostConstruct
-    public void enviarAtualizacaoDeStatus() throws JsonProcessingException {
-        OrdemMessage ordem = new OrdemMessage(1, 10, "abc");
-        Message message = MessageBuilder.withBody(objectMapper.writeValueAsString(ordem).getBytes())
-                .andProperties(MessagePropertiesBuilder
-                        .newInstance()
-                        .setContentType("application/json")
-                        .build())
-                .build();
-        template.convertAndSend("atualizacao.*", "atualizacao.btc", message);
+    public void enviarAtualizacaoDeStatus(AtualizacaoMessage atualizacao, String codigoAcao) {
+        try {
+            Message message = MessageBuilder.withBody(objectMapper.writeValueAsString(atualizacao).getBytes())
+                    .andProperties(MessagePropertiesBuilder
+                            .newInstance()
+                            .setContentType("application/json")
+                            .build())
+                    .build();
+            template.convertAndSend("atualizacao.*", "atualizacao." + codigoAcao, message);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

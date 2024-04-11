@@ -1,12 +1,18 @@
 package com.project.bolsadevalores.app.service;
 
 import com.project.bolsadevalores.app.domain.Ordem;
+import com.project.bolsadevalores.app.messaging.QueueMessage;
+import com.project.bolsadevalores.app.messaging.dto.AtualizacaoMessage;
+import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+@AllArgsConstructor
 public class Transacao {
+
+    QueueMessage queue;
 
     public void efetuarVenda(Ordem ordem, Queue<Ordem> filaAtual, Queue<Ordem> filaDeOutroTipoDeOrdem) {
         this.efetuarTransacao(ordem, filaAtual, filaDeOutroTipoDeOrdem, true);
@@ -34,7 +40,11 @@ public class Transacao {
         }
 
         List<Ordem> afetados = new ArrayList<>(remover);
-        afetados.add(ordem);
+        afetados.forEach(afetado -> {
+            AtualizacaoMessage atualizacao = new AtualizacaoMessage("venda", afetado);
+            // Corrigr para acao
+            queue.enviarAtualizacaoDeStatus(atualizacao, afetado.getCorretora());
+        });
 
         filaDeOutroTipoDeOrdem.removeAll(remover);
         if (quantidadeNecessaria == 0) {

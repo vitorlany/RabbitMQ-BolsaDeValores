@@ -15,6 +15,7 @@ public class LivroDeOfertas {
 
     private LivroDeOfertas(String codigoDeAcao) {
         this.codigoDeAcao = codigoDeAcao;
+        // corrigir injeção de dependency
         this.transacao = new Transacao();
         this.ordensDeCompra = new PriorityQueue<>(Comparator.comparing(Ordem::getValor).reversed().thenComparing(Ordem::getId));
         this.ordensDeVenda = new PriorityQueue<>(Comparator.comparing(Ordem::getValor).thenComparing(Ordem::getId));
