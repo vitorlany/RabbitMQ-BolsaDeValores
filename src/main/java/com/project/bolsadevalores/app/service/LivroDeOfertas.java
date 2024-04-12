@@ -1,5 +1,6 @@
 package com.project.bolsadevalores.app.service;
 
+import com.project.bolsadevalores.BolsadevaloresApplication;
 import com.project.bolsadevalores.app.domain.Ordem;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.util.PriorityQueue;
 @Component
 public class LivroDeOfertas {
     private static HashMap<String, LivroDeOfertas> LIVROS_DE_OFERTAS = new HashMap<>();
-    private Transacao transacao;
+    private final Transacao transacao;
     private PriorityQueue<Ordem> ordensDeCompra;
     private PriorityQueue<Ordem> ordensDeVenda;
 
@@ -34,7 +35,7 @@ public class LivroDeOfertas {
         if (LIVROS_DE_OFERTAS.containsKey(codigoDeAcao)) {
             return LIVROS_DE_OFERTAS.get(codigoDeAcao);
         } else {
-            LivroDeOfertas novoLivro = new Transacao();
+            LivroDeOfertas novoLivro = BolsadevaloresApplication.applicationContext.getBean(LivroDeOfertas.class);
             LIVROS_DE_OFERTAS.put(codigoDeAcao, novoLivro);
             return novoLivro;
         }

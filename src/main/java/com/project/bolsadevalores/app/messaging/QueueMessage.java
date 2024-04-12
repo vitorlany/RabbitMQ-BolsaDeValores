@@ -16,8 +16,6 @@ import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 @AllArgsConstructor
 public class QueueMessage {
@@ -28,23 +26,23 @@ public class QueueMessage {
     //comprar.petr4
     //{"quantidade": 5, "valor": 135.5, "corretora": "XPTO"}
     @RabbitListener(queues = "ComprarAcao")
-    public UUID receberCompraDeAcao(final OrdemMessage content,
+    public void receberCompraDeAcao(final OrdemMessage content,
                                     @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) {
         String codigoDeAcao = routingKey.replaceFirst("comprar.", "");
         Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora(), codigoDeAcao);
         BolsaDeValores.comprarAcao(ordem, codigoDeAcao);
         System.out.println("Comprar: " + content);
-        return ordem.getId();
+//        return ordem.getId();
     }
 
     @RabbitListener(queues = "VenderAcao")
-    public UUID receberVendaDeAcao(final OrdemMessage content,
+    public void receberVendaDeAcao(final OrdemMessage content,
                                    @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) {
         String codigoDeAcao = routingKey.replaceFirst("vender.", "");
         Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora(), codigoDeAcao);
         BolsaDeValores.venderAcao(ordem, codigoDeAcao);
         System.out.println("Vender: " + content);
-        return ordem.getId();
+//        return ordem.getId();
     }
 
     public void enviarAtualizacaoDeStatus(AtualizacaoMessage atualizacao, String codigoAcao) {

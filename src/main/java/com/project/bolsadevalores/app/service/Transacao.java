@@ -4,11 +4,13 @@ import com.project.bolsadevalores.app.domain.Ordem;
 import com.project.bolsadevalores.app.messaging.QueueMessage;
 import com.project.bolsadevalores.app.messaging.dto.AtualizacaoMessage;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+@Component
 @AllArgsConstructor
 public class Transacao {
 
