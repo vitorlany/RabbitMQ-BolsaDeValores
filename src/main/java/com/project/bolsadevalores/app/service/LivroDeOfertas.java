@@ -1,22 +1,21 @@
 package com.project.bolsadevalores.app.service;
 
 import com.project.bolsadevalores.app.domain.Ordem;
+import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
+@Component
 public class LivroDeOfertas {
     private static HashMap<String, LivroDeOfertas> LIVROS_DE_OFERTAS = new HashMap<>();
     private Transacao transacao;
-    private String codigoDeAcao;
     private PriorityQueue<Ordem> ordensDeCompra;
     private PriorityQueue<Ordem> ordensDeVenda;
 
-    private LivroDeOfertas(String codigoDeAcao) {
-        this.codigoDeAcao = codigoDeAcao;
-        // corrigir injeção de dependency
-        this.transacao = new Transacao();
+    LivroDeOfertas(Transacao transacao) {
+        this.transacao = transacao;
         this.ordensDeCompra = new PriorityQueue<>(Comparator.comparing(Ordem::getValor).reversed().thenComparing(Ordem::getId));
         this.ordensDeVenda = new PriorityQueue<>(Comparator.comparing(Ordem::getValor).thenComparing(Ordem::getId));
     }
@@ -35,7 +34,7 @@ public class LivroDeOfertas {
         if (LIVROS_DE_OFERTAS.containsKey(codigoDeAcao)) {
             return LIVROS_DE_OFERTAS.get(codigoDeAcao);
         } else {
-            LivroDeOfertas novoLivro = new LivroDeOfertas(codigoDeAcao);
+            LivroDeOfertas novoLivro = new Transacao();
             LIVROS_DE_OFERTAS.put(codigoDeAcao, novoLivro);
             return novoLivro;
         }

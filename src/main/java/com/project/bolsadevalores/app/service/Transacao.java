@@ -43,7 +43,7 @@ public class Transacao {
         afetados.forEach(afetado -> {
             AtualizacaoMessage atualizacao = new AtualizacaoMessage("venda", afetado);
             // Corrigr para acao
-            queue.enviarAtualizacaoDeStatus(atualizacao, afetado.getCorretora());
+            queue.enviarAtualizacaoDeStatus(atualizacao, afetado.getCodigoDeAcao());
         });
 
         filaDeOutroTipoDeOrdem.removeAll(remover);

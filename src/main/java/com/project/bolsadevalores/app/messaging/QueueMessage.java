@@ -29,7 +29,7 @@ public class QueueMessage {
     public void receberCompraDeAcao(final OrdemMessage content,
                                     @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) {
         String codigoDeAcao = routingKey.replaceFirst("comprar.", "");
-        Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora());
+        Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora(), codigoDeAcao);
         BolsaDeValores.comprarAcao(ordem, codigoDeAcao);
         System.out.println("Comprar: " + content);
     }
@@ -38,7 +38,7 @@ public class QueueMessage {
     public void receberVendaDeAcao(final OrdemMessage content,
                                    @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) {
         String codigoDeAcao = routingKey.replaceFirst("vender.", "");
-        Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora());
+        Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora(), codigoDeAcao);
         BolsaDeValores.venderAcao(ordem, codigoDeAcao);
         System.out.println("Vender: " + content);
     }
