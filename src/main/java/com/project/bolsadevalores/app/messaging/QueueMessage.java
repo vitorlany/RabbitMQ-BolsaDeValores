@@ -32,7 +32,6 @@ public class QueueMessage {
         Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora(), codigoDeAcao);
         BolsaDeValores.comprarAcao(ordem, codigoDeAcao);
         System.out.println("Comprar: " + content);
-//        return ordem.getId();
     }
 
     @RabbitListener(queues = "VenderAcao")
@@ -42,7 +41,6 @@ public class QueueMessage {
         Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora(), codigoDeAcao);
         BolsaDeValores.venderAcao(ordem, codigoDeAcao);
         System.out.println("Vender: " + content);
-//        return ordem.getId();
     }
 
     public void enviarAtualizacaoDeStatus(AtualizacaoMessage atualizacao, String codigoAcao) {

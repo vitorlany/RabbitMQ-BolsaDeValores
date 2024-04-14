@@ -44,17 +44,16 @@ public class Transacao {
         List<Ordem> afetados = new ArrayList<>(remover);
         afetados.forEach(afetado -> {
             AtualizacaoMessage atualizacao = new AtualizacaoMessage("venda", afetado);
-            // Corrigr para acao
             queue.enviarAtualizacaoDeStatus(atualizacao, afetado.getCodigoDeAcao());
         });
 
         filaDeOutroTipoDeOrdem.removeAll(remover);
         if (quantidadeNecessaria == 0) {
+            AtualizacaoMessage atualizacao = new AtualizacaoMessage("compra", ordem);
+            queue.enviarAtualizacaoDeStatus(atualizacao, ordem.getCodigoDeAcao());
             filaAtual.remove(ordem);
         } else {
             ordem.setQuantidade(quantidadeNecessaria);
         }
-
-        // Chama mensageria com afetados
     }
 }
