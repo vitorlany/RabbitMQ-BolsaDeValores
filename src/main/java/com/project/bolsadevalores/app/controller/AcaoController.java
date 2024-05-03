@@ -2,6 +2,7 @@ package com.project.bolsadevalores.app.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.bolsadevalores.app.messaging.dto.AtualizacaoMessage;
 import com.project.bolsadevalores.app.messaging.dto.OrdemMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.core.Message;
@@ -41,4 +42,5 @@ public class AcaoController {
                 .build();
         template.convertAndSend("vender.*", "vender." + acaoRequest.codigoAcao(), message);
     }
+
 }

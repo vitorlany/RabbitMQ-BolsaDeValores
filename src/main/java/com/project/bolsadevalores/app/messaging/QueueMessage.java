@@ -34,7 +34,7 @@ public class QueueMessage {
     @RabbitListener(queues = "ComprarAcao")
     public void receberCompraDeAcao(final OrdemMessage content,
                                     @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) throws IOException {
-        String codigoDeAcao = routingKey.replaceFirst("comprar.", "");
+        String codigoDeAcao = routingKey.replaceFirst("atualizacao.", "");
         Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora(), codigoDeAcao);
         BolsaDeValores.comprarAcao(ordem, codigoDeAcao);
         System.out.println("Comprar: " + content);
@@ -44,7 +44,7 @@ public class QueueMessage {
     @RabbitListener(queues = "VenderAcao")
     public void receberVendaDeAcao(final OrdemMessage content,
                                    @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) throws IOException {
-        String codigoDeAcao = routingKey.replaceFirst("vender.", "");
+        String codigoDeAcao = routingKey.replaceFirst("atualizacao.", "");
         Ordem ordem = new Ordem(content.quantidade(), content.valor(), content.corretora(), codigoDeAcao);
         BolsaDeValores.venderAcao(ordem, codigoDeAcao);
         System.out.println("Vender: " + content);
