@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste WebSocket</title>
+</head>
+<body>
+    <h1>Teste de Conexão WebSocket</h1>
+    <div id="messages"></div>
+    <script>
+        var ws = new WebSocket('ws://localhost:8080/websocket');
+
+        ws.onopen = function(event) {
+            ws.send('Hello Server!');  // Envia uma mensagem inicial ao servidor, se necessário
+        };
+
+        ws.onmessage = function(event) {
+            var message = event.data;
+            var messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += '<p>Mensagem recebida: ' + message + '</p>';
+        };
+
+        ws.onerror = function(error) {
+            console.error('WebSocket error: ' + error);
+        };
+    </script>
+</body>
+</html>

@@ -4,6 +4,7 @@ import com.project.bolsadevalores.BolsadevaloresApplication;
 import com.project.bolsadevalores.app.domain.Ordem;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -21,12 +22,12 @@ public class LivroDeOfertas {
         this.ordensDeVenda = new PriorityQueue<>(Comparator.comparing(Ordem::getValor).thenComparing(Ordem::getId));
     }
 
-    public void registrarOrdemDeCompra(Ordem ordem) {
+    public void registrarOrdemDeCompra(Ordem ordem) throws IOException {
         ordensDeCompra.add(ordem);
         transacao.efetuarCompra(ordem, ordensDeCompra, ordensDeVenda);
     }
 
-    public void registrarOrdemDeVenda(Ordem ordem) {
+    public void registrarOrdemDeVenda(Ordem ordem) throws IOException {
         ordensDeVenda.add(ordem);
         transacao.efetuarVenda(ordem, ordensDeVenda, ordensDeCompra);
     }
