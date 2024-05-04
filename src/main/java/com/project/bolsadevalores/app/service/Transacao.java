@@ -31,8 +31,8 @@ public class Transacao {
         int quantidadeNecessaria = ordem.getQuantidade();
 
         for (Ordem ordemIteracao : fila) {
-            if ((quantidadeNecessaria == 0) || (isCompra ? (ordemIteracao.getValor() > ordem.getValor()) :
-                                                           (ordemIteracao.getValor() < ordem.getValor()))) break;
+            if ((quantidadeNecessaria == 0) || (isCompra ? (ordemIteracao.getValor() < ordem.getValor()) :
+                                                           (ordemIteracao.getValor() > ordem.getValor()))) break;
             if (quantidadeNecessaria < ordemIteracao.getQuantidade()) {
                 ordemIteracao.setQuantidade(ordemIteracao.getQuantidade() - quantidadeNecessaria);
                 quantidadeNecessaria = 0;

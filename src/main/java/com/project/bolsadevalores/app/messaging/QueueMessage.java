@@ -59,6 +59,7 @@ public class QueueMessage {
                             .setContentType("application/json")
                             .build())
                     .build();
+            System.out.println(atualizacao);
             template.convertAndSend("atualizacao.*", "atualizacao." + codigoAcao, message);
             webSocketHandler.broadcast("Atualização: " + atualizacao.toString());
         } catch (JsonProcessingException e) {
